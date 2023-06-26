@@ -39,8 +39,8 @@ template <typename M>
 concept MatrixRange = std::ranges::sized_range<M> &&
   requires(M matrix) {
     typename container_traits<std::remove_cvref_t<M>>;
-    // typename GRB_SPEC_NAMESPACE::matrix_scalar_t<M>;
-    // typename GRB_SPEC_NAMESPACE::matrix_index_t<M>;
+    typename GRB_SPEC_NAMESPACE::matrix_scalar_t<M>;
+    typename GRB_SPEC_NAMESPACE::matrix_index_t<M>;
     {std::declval<std::ranges::range_value_t<M>>()}
       -> MatrixEntry<GRB_SPEC_NAMESPACE::matrix_scalar_t<M>,
                      GRB_SPEC_NAMESPACE::matrix_index_t<M>>;

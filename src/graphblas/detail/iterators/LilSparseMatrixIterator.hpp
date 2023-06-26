@@ -47,7 +47,7 @@ public:
   using inner_iterator = std::ranges::iterator_t<std::ranges::range_value_t<M>>;
 
   constexpr adjacency_list_view_accessor(M& matrix, std::size_t row, inner_iterator col) noexcept
-      : matrix_(std::ranges::views::all(matrix)), row_(row), col_(col) {
+      : matrix_ptr_(&matrix), row_(row), col_(col) {
         fast_forward();
       }
 
@@ -62,10 +62,10 @@ public:
   }
 
   void fast_forward() {
-    while (col_ == matrix_[row_].end() && row_ < matrix_.size()-1) {
+    while (col_ == matrix_()[row_].end() && row_ < matrix_().size()-1) {
       ++row_;
-      if (row_ != matrix_.size()-1) {
-        col_ = matrix_[row_].begin();
+      if (row_ != matrix_().size()-1) {
+        col_ = matrix_()[row_].begin();
       }
     }
   }
@@ -76,7 +76,12 @@ public:
   }
 
 private:
-  std::ranges::views::all_t<M&> matrix_;
+
+  M& matrix_() {
+    return *matrix_ptr_;
+  }
+
+  M* matrix_ptr_;
   size_type row_;
   inner_iterator col_;
 };

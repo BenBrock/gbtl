@@ -137,9 +137,20 @@ public:
   // cbegin()
   // cend()
 
-  // find()
-
   // insert variants need to return iterators
+
+  auto find(key_type key) {
+    if (!backend_.hasElement(key[0], key[1])) {
+      return end();
+    } else {
+      for (auto iter = begin(); iter != end(); ++iter) {
+        auto&& [index, _] = *iter;
+        if (index == key) {
+          return iter;
+        }
+      }
+    }
+  }
 
   matrix() = default;
   matrix(const Allocator& allocator) {}
