@@ -20,6 +20,5 @@ int main(int argc, char** argv) {
   g = m[{4, 3}];
   std::cout << g << std::endl;
 
-
   return 0;
 }

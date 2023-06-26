@@ -21,9 +21,9 @@ void ewise_intersection(C&& c, A&& a, B&& b, Combine&& combine, M&& mask = M{}, 
 {
   auto merge_enum = (merge) ? GBTL_NAMESPACE::OutputControlEnum::MERGE : GBTL_NAMESPACE::OutputControlEnum::REPLACE;
   if constexpr(std::is_same_v<M, GRB_SPEC_NAMESPACE::full_matrix_mask<>>) {
-    GBTL_NAMESPACE::eWiseAdd(c.backend_, GBTL_NAMESPACE::NoMask(), acc, combine, a.backend_, b.backend_, merge_enum);
+    GBTL_NAMESPACE::eWiseMult(c.backend_, GBTL_NAMESPACE::NoMask(), acc, combine, a.backend_, b.backend_, merge_enum);
   } else {
-    GBTL_NAMESPACE::eWiseAdd(c.backend_, mask.backend_, acc, combine, a.backend_, b.backend_, merge_enum);
+    GBTL_NAMESPACE::eWiseMult(c.backend_, mask.backend_, acc, combine, a.backend_, b.backend_, merge_enum);
   }
 }
 

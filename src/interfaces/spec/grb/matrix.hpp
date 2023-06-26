@@ -121,13 +121,19 @@ public:
     backend_.clear();
   }
 
+  auto begin() {
+    return get_internal_matrix(backend_).begin();
+  }
+
+  auto end() {
+    return get_internal_matrix(backend_).end();
+  }
+
   // Missing
 
   // at()
 
   // Iteration
-  // begin()
-  // end()
   // cbegin()
   // cend()
 

@@ -32,8 +32,11 @@
 #include <typeinfo>
 #include <stdexcept>
 #include <algorithm>
+#include <ranges>
 
 #include <graphblas/graphblas.hpp>
+
+#include <graphblas/detail/iterators/LilSparseMatrixIterator.hpp>
 
 //****************************************************************************
 
@@ -788,6 +791,31 @@ namespace grb
                 #endif
             }
 
+            auto begin() {
+                return GRB_SPEC_NAMESPACE::__detail::adjacency_list_view_iterator<decltype(m_data)>(m_data, 0, m_data[0].begin());
+            }
+
+            auto end() {
+                return GRB_SPEC_NAMESPACE::__detail::adjacency_list_view_iterator<decltype(m_data)>(m_data, nvals(), m_data[m_data.size()-1].end());
+            }
+
+            template <typename T, typename I>
+            friend auto get_iterable_view_(LilSparseMatrix<ScalarT>& m) {
+
+              return std::ranges::views::zip(std::ranges::views::iota(std::size_t(0)),
+                                             m.m_data)
+                     | std::ranges::views::transform([](auto&& row) {
+                         auto&& [row_index, row_tuples] = row;
+                         return row_tuples |
+                                std::ranges::views::transform([row_index](auto&& row_tuple) {
+                                  auto&& [column_index, value] = row_tuple;
+                                  return matrix_entry<T, I>(index<I>(row_index, column_index),
+                                                            value);
+                                });
+                       })
+                     | std::ranges::views::join;
+            }
+
             friend std::ostream &operator<<(std::ostream             &os,
                                             LilSparseMatrix<ScalarT> const &mat)
             {
@@ -795,7 +823,7 @@ namespace grb
                 return os;
             }
 
-        private:
+        // private:
             IndexType m_num_rows;
             IndexType m_num_cols;
             IndexType m_nvals;

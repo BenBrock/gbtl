@@ -271,12 +271,12 @@ namespace grb
 
         // FRIEND FUNCTIONS
 
-        friend inline BackendType &get_internal_matrix(Matrix &matrix)
+        friend inline BackendType& get_internal_matrix(Matrix &matrix)
         {
             return matrix.m_mat;
         }
 
-        friend inline BackendType const &get_internal_matrix(Matrix const &matrix)
+        friend inline const BackendType& get_internal_matrix(Matrix const &matrix)
         {
             return matrix.m_mat;
         }
